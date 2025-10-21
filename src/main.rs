@@ -24,13 +24,14 @@ struct BuildTarget {
     triple: &'static str,
     arch: &'static str,
     os: &'static str,
+    archos: &'static str,
 }
 
 const PKG_NAME: &'static str = "common_addin";
 
 const BUILD_TARGETS: [BuildTarget;2] = [
-    BuildTarget { triple: "i686-pc-windows-msvc", arch: "i386", os: "Windows" },
-    BuildTarget { triple: "x86_64-pc-windows-msvc", arch: "x86_64", os: "Windows" },
+    BuildTarget { triple: "i686-pc-windows-msvc",   arch: "i386",   os: "Windows", archos: "win32" },
+    BuildTarget { triple: "x86_64-pc-windows-msvc", arch: "x86_64", os: "Windows", archos: "win64" },
 ];
 
 fn main() {
@@ -90,7 +91,7 @@ fn main() {
         let dll_with_timestamp_name = String::new() + 
             PKG_NAME +
             "." +
-            build_target.arch +
+            build_target.archos +
             "." +
             &timestamp_str +
             ".dll";
@@ -100,8 +101,6 @@ fn main() {
             .join(build_target.triple)
             .join(release_or_debug)
             .join(&original_dll_name);
-
-        // println!("original_dll_path = {:?}", &original_dll_path);
 
         assert!( &original_dll_path.exists() );
         let content = fs::read(original_dll_path).unwrap();
